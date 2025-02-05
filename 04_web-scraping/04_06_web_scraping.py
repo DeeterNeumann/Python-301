@@ -14,26 +14,13 @@ with open('nfl_stats.json', "r") as fin:
 
 nfl_url = "https://nfl.com"
 
-# print(type(nfl_data)) Output: <class 'str'>
-
 nfl_soup = BeautifulSoup(nfl_data)
-
-# links = nfl_soup.find_all("a")
-
-# links_list = [link['href'] for link in links]
-
-# print(links_list)
-
-# print(nfl_soup.prettify())
 
 nfl_links = nfl_soup.find_all('a', href=True)
 
 search_string = "/players/"
 
 links_list = [link['href'] for link in nfl_links if search_string in link['href']]
-
-
-# print(links_list)
 
 leading_passer = next((link for link in links_list if "/players/" in link))
 
@@ -50,6 +37,16 @@ total_interceptions = sum(interception_values)
 print(f"The NFL's leading passer has thrown {total_interceptions} interceptions")
 
 
+# print(type(nfl_data)) Output: <class 'str'>
+
+# links = nfl_soup.find_all("a")
+
+# links_list = [link['href'] for link in links]
+
+# print(links_list)
+
+# print(nfl_soup.prettify())
+
 # player_link = next((link for link in links_list if))
 
 # for link in links:
@@ -64,7 +61,6 @@ print(f"The NFL's leading passer has thrown {total_interceptions} interceptions"
 
 # print(player_link)
 # player_url = nfl_url + player_link
-
 
 # print(player_url)
 
