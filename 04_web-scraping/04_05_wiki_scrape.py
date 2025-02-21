@@ -35,13 +35,13 @@ wikipedia_link = next((link for link in links_list if "wikipedia.org/wiki/" in l
 if wikipedia_link:
     print("First Wikipedia link:", wikipedia_link)
 
-
     wiki_page = requests.get(wikipedia_link)
     scraped_page = wiki_page.text
 
-    with open('wiki_scrape.json', 'w') as fout:
-        json.dump(scraped_page, fout)
+    with open('wiki_scrape.html', 'w+', encoding="utf-8") as fout:
+        fout.write(scraped_page)
+        # encoding tells how to translate the 1 and 0s into characters. Different ways to do this. utf-8 is a way to do this. Lots of ways to do this
 
-    print("Scraped Wikipedia page saved to 'wiki_scrape.json'")
+    print("Scraped Wikipedia page saved to 'wiki_scrape.html'")
 else:
     print("No Wikipedia link found.")

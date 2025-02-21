@@ -9,13 +9,13 @@ from bs4 import BeautifulSoup
 import requests
 import json
 
-with open('nfl_stats.json', "r") as fin:
-    nfl_data = json.load(fin)
 
 nfl_url = "https://nfl.com"
 
-nfl_soup = BeautifulSoup(nfl_data)
+with open('nfl_stats.json', "r") as fin:
+    nfl_data = json.load(fin)
 
+nfl_soup = BeautifulSoup(nfl_data, features="html.parser")
 nfl_links = nfl_soup.find_all('a', href=True)
 
 search_string = "/players/"
@@ -24,56 +24,76 @@ links_list = [link['href'] for link in nfl_links if search_string in link['href'
 
 leading_passer = next((link for link in links_list if "/players/" in link))
 
-leading_passer_stats_url = nfl_url + leading_passer + "stats/"
+name = leading_passer.split("/")[2]
 
-leading_passer_soup = BeautifulSoup(leading_passer_stats_url)
+first_name, last_name = name.split("-")
 
-interception_data = leading_passer_soup.find_all('td', class_="nfl-t-stats_col-14 selected")
+leading_passer_wiki_url = f"https://en.wikipedia.org/wiki/{first_name.capitalize()}_{last_name.capitalize()}"
 
-interception_values = [float(td.text.strip()) for td in interception_data]
+# print(leading_passer_wiki_url)
 
-total_interceptions = sum(interception_values)
+passer_response = requests.get(leading_passer_wiki_url)
+passer_response_data = passer_response.text
 
-print(f"The NFL's leading passer has thrown {total_interceptions} interceptions")
+# print(passer_response_data)
 
-
-# print(type(nfl_data)) Output: <class 'str'>
-
-# links = nfl_soup.find_all("a")
-
-# links_list = [link['href'] for link in links]
-
-# print(links_list)
-
-# print(nfl_soup.prettify())
-
-# player_link = next((link for link in links_list if))
-
-# for link in links:
-#     if http_search in link["href"]:
-#         links_list.append(link)
-
-# player = input("Enter last name of an NFL player: ")
-
-# player = player.lower()
-
-# player_link = next((link for link in links_list if player in link), None)
-
-# print(player_link)
-# player_url = nfl_url + player_link
-
-# print(player_url)
-
-# if player_link:
-#     print("Player: ", player_url)
+leading_passer_soup = BeautifulSoup(passer_response_data, features="html.parser")
 
 
-#     player_page = requests.get(player_url)
-#     scraped_page = player_page.text
+interception_data = leading_passer_soup.select("h3#Regular_season")[0]
 
-#     with open('player_scrape.json', 'w') as fout:
-#         json.dump(scraped_page, fout)
+regular_season_table = interception_data.find_next("table")
 
-#     print("Scraped NFL player page saved to 'player_scrape.json'")
-# else:
-#     print("No player link found.")
+links = regular_season_table.find_all("a", href=True)
+
+# print(links)
+
+http_search = "/wiki/2024_NFL_season"
+# # wiki_search = "/wiki/"
+
+links_list = [link for link in links if http_search in link['href']]
+
+target_link = links_list[0]
+
+# print(target_link)
+
+games_played = target_link.findNext('b').contents[0]
+
+games_started = games_played.findNext('b').contents[0]
+
+record = games_started.findNext('td').contents[0]
+
+completions = record.findNext('b').contents[0]
+
+attempts = completions.findNext('b').contents[0]
+
+pass_percentage = attempts.findNext('b').contents[0]
+
+yards = pass_percentage.findNext('b').contents[0]
+
+yards_per_attempt = yards.findNext('td').contents[0]
+
+longest_pass = yards_per_attempt.findNext('td').contents[0]
+
+touchdowns = longest_pass.findNext('b').contents[0]
+
+interceptions = touchdowns.findNext('td').contents[0]
+
+rating = interceptions.findNext('b').contents[0]
+
+# print(games_played)
+# print(games_started)
+# print(record)
+# print(completions)
+# print(attempts)
+# print(pass_percentage)
+# print(yards)
+# print(yards_per_attempt)
+# print(longest_pass)
+# print(touchdowns)
+# print(interceptions)
+# print(rating)
+
+print(f"The NFL's leading passer, {first_name.capitalize()} {last_name.capitalize()}, threw for {yards} yards and {interceptions} interceptions in the 2024 season.")
+
+# selenium
