@@ -51,10 +51,15 @@ def get_value(stat):
 def stat_dict():
     player_stats = {"games_played": None, "games_started": None, "record": None, "completions": None, "attempts": None, "pass_percentage": None, "yards": None, "yards_per_attempt": None, "longest_pass": None, "touchdowns": None, "interceptions": None, "rating": None }
     n = 2
-    while n < 14:
-        for key in player_stats:
-            player_stats[key] = get_value(target_row[n])
-            n += 1
+    for key in player_stats:
+        player_stats[key] = get_value(target_row[n])
+        n += 1
+        if n >= 14:
+            break
+    # while n < 14:
+        # for key in player_stats:
+        #     player_stats[key] = get_value(target_row[n])
+        #     n += 1
     return player_stats
 
 # print(type(""))
@@ -131,5 +136,7 @@ target_row = links[-2].contents
 # rows 2-13
 
 player_stats = stat_dict()
+
+print(player_stats)
 
 print(f"The NFL's leading passer, {first_name.capitalize()} {last_name.capitalize()}, threw for {player_stats["yards"]} yards and {player_stats["interceptions"]} interceptions in the 2024 season.")
