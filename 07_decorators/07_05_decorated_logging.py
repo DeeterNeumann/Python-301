@@ -26,8 +26,6 @@ do_something()
 
 sleep_time(2)
 
-# time = datetime.datetime.now()
-
 def time_it(initial_func):
     def wrapper_func():
         time = datetime.datetime.now()
