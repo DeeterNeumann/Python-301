@@ -29,4 +29,4 @@ def decorate_again(word):
 
 to_be_decorated("hello")
 
-decorate_again("dog")
+decorate_again("goodbye")
