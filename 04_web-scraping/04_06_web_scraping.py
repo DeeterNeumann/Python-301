@@ -57,29 +57,29 @@ target_link = links_list[0]
 
 # print(target_link)
 
-games_played = target_link.findNext('b').contents[0]
+games_played = target_link.find_next('b').contents[0]
 
-games_started = games_played.findNext('b').contents[0]
+games_started = games_played.find_next('b').contents[0]
 
-record = games_started.findNext('td').contents[0]
+record = games_started.find_next('td').contents[0]
 
-completions = record.findNext('b').contents[0]
+completions = record.find_next('b').contents[0]
 
-attempts = completions.findNext('b').contents[0]
+attempts = completions.find_next('b').contents[0]
 
-pass_percentage = attempts.findNext('b').contents[0]
+pass_percentage = attempts.find_next('b').contents[0]
 
-yards = pass_percentage.findNext('b').contents[0]
+yards = pass_percentage.find_next('b').contents[0]
 
-yards_per_attempt = yards.findNext('td').contents[0]
+yards_per_attempt = yards.find_next('td').contents[0]
 
-longest_pass = yards_per_attempt.findNext('td').contents[0]
+longest_pass = yards_per_attempt.find_next('td').contents[0]
 
-touchdowns = longest_pass.findNext('b').contents[0]
+touchdowns = longest_pass.find_next('b').contents[0]
 
-interceptions = touchdowns.findNext('td').contents[0]
+interceptions = touchdowns.find_next('td').contents[0]
 
-rating = interceptions.findNext('b').contents[0]
+rating = interceptions.find_next('b').contents[0]
 
 # print(games_played)
 # print(games_started)
