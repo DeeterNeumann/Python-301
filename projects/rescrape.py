@@ -16,7 +16,7 @@ from pprint import pprint
 
 # Input to gather ingredients from user
 ingredients = input("Enter the ingredients you want to use in a recipe, each separated by a comma (Example: milk, eggs, flour): ")
-ingredient_list = ingredients.split(", ")
+ingredient_list = [ingredient.strip().lower() for ingredient in ingredients.split(",")]
 
 URL = "https://codingnomads.github.io/recipes"
 get_recipes = requests.get(URL)
@@ -31,21 +31,26 @@ search_string = "recipes/"
 
 links_list = [link['href'] for link in recipe_links if search_string in link['href']]
 
-recipe_list = []
+matching_recipes = []
 
 for link in links_list:
     recipe_url = f"https://codingnomads.github.io/recipes/{link}"
-    recipe_response = requests.get(recipe_url)
-    recipe_data = recipe_response.text
-    recipe_soup = BeautifulSoup(recipe_data, features="html.parser")
-    ingredient_data = recipe_soup.find_all("md")
-    for ingredients in ingredient_data:
-        recipe_list.append(link)
-    print(recipe_list)
-    
+    try:
+        recipe_response = requests.get(recipe_url)
+        recipe_data = recipe_response.text
+        recipe_soup = BeautifulSoup(recipe_data, features="html.parser")
 
-# search each URL for included ingredients
+        ingredients_section = recipe_soup.find(class_="ingredients")
 
-# Fetch recipe from CodingNomads recipe collection
+        if ingredients_section:
+            recipe_text = ingredients_section.get_text().lower()
+        else:
+            recipe_text = recipe_data.lower()
 
-# Search recipes to find ones including provided ingredients
+        if all(ingredient in recipe_text for ingredient in ingredient_list):
+            matching_recipes.append(recipe_url)
+    except Exception as e:
+        print(f"Error scraping {recipe_url}: {e}")
+
+print("\nMatching Recipes:")
+pprint(matching_recipes)
