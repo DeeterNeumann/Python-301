@@ -40,12 +40,12 @@ for link in links_list:
         recipe_data = recipe_response.text
         recipe_soup = BeautifulSoup(recipe_data, features="html.parser")
 
-        ingredients_section = recipe_soup.find(class_="ingredients")
+        # ingredients_section = recipe_soup.find(class_="ingredients")
 
-        if ingredients_section:
-            recipe_text = ingredients_section.get_text().lower()
-        else:
-            recipe_text = recipe_data.lower()
+        # if ingredients_section:
+        #     recipe_text = ingredients_section.get_text().lower()
+        # else:
+        recipe_text = recipe_data.lower()
 
         if all(ingredient in recipe_text for ingredient in ingredient_list):
             matching_recipes.append(recipe_url)
