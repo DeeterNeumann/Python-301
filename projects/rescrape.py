@@ -38,8 +38,7 @@ for link in links_list:
     try:
         recipe_response = requests.get(recipe_url)
         recipe_data = recipe_response.text
-        recipe_soup = BeautifulSoup(recipe_data, features="html.parser")
-
+        
         # ingredients_section = recipe_soup.find(class_="ingredients")
 
         # if ingredients_section:
