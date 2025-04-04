@@ -18,6 +18,8 @@ from pprint import pprint
 ingredients = input("Enter the ingredients you want to use in a recipe, each separated by a comma (Example: milk, eggs, flour): ")
 ingredient_list = [ingredient.strip().lower() for ingredient in ingredients.split(",")]
 
+print("Gathering recipes...")
+
 URL = "https://codingnomads.github.io/recipes"
 get_recipes = requests.get(URL)
 
@@ -36,6 +38,7 @@ matching_recipes = []
 for link in links_list:
     recipe_url = f"https://codingnomads.github.io/recipes/{link}"
     try:
+        print(f"Searching...{link}")
         recipe_response = requests.get(recipe_url)
         recipe_data = recipe_response.text
         
@@ -51,5 +54,8 @@ for link in links_list:
     except Exception as e:
         print(f"Error scraping {recipe_url}: {e}")
 
-print("\nMatching Recipes:")
-pprint(matching_recipes)
+if matching_recipes:
+    print(f"\nWe found {len(matching_recipes)} recipes that include your ingredients!:")
+    pprint(matching_recipes)
+else:
+    print("There were no recipes that included all the ingredients you entered!")
